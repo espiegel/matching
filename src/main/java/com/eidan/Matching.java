@@ -1,11 +1,14 @@
 package com.eidan;
 
 import java.io.*;
+import java.math.BigInteger;
 
 /**
  * Created by eidan on 2/10/15.
  */
 public class Matching {
+
+    private static final BigInteger BILLION_AND_SEVEN = new BigInteger("1000000007");
 
     public static void main(String[] args) {
         try {
@@ -36,12 +39,14 @@ public class Matching {
                 if(i % 1000 == 0) {
                     System.out.println("Calculating matches for i = " + i);
                 }
-                long num = getNum(matches, i - 2) * 2;
+                BigInteger num = BigInteger.valueOf(getNum(matches, i - 2) * 2);
                 for(int j = 0; j <= i; j += 2) {
-                    num += getNum(matches, j) * getNum(matches, i - j - 2);
+                    BigInteger tmp = BigInteger.valueOf((getNum(matches, j)))
+                            .multiply(BigInteger.valueOf((getNum(matches, i - j - 2))))
+                            .mod(BILLION_AND_SEVEN);
+                    num = num.add(tmp).mod(BILLION_AND_SEVEN);
                 }
-                num = num % 1000000007;
-                matches[i] = num;
+                matches[i] = num.longValue();
             }
         }
 
